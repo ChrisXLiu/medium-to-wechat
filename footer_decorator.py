@@ -1,0 +1,12 @@
+def add_footer(soup, root):
+    root.append(soup.new_tag('br'))
+    new_p = soup.new_tag('p')
+    new_p.append('💎：如果这篇文章让你有所收获，欢迎')
+    strong_tag = soup.new_tag('strong')
+    strong_tag.append('转发到朋友圈')
+    new_p.append(strong_tag)
+    new_p.append('，让更多人看到。')
+    root.append(new_p)
+    new_p = soup.new_tag('p')
+    new_p.append('💎：你有其他的经验心得吗？欢迎在留言区跟我们分享。')
+    root.append(new_p)
