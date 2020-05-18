@@ -19,7 +19,10 @@ def upload_image(img_filename):
         files=files)
     if response.status_code != 200:
         raise Exception('Failed to upload image ' + img_filename)
-    return json.loads(response.text)['url']
+    data = json.loads(response.text)
+    if "url" not in data:
+        raise Exception('Failed to upload image ' + img_filename + ' ' + response.text)
+    return data['url']
 
 
 def upload_article(article):

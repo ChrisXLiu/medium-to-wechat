@@ -10,6 +10,13 @@ import os.path
 IMG_BASE_URL = 'https://miro.medium.com/max/1200/'
 
 
+def ensure_file_extension(filename):
+    if not (filename.endswith(".jpg") or filename.endswith(".jpg") or filename.endswith(".jpg")):
+        print("Turning " + filename + " into " + filename + ".jpg")
+        return filename + ".jpg"
+    return filename
+
+
 def parse(data):
     """
         Parses the raw JSON data from Medium post pages to our own format.
@@ -53,14 +60,15 @@ def parse(data):
             if os.path.isfile(img_filename):
                 print("Image already existed: " + img_filename)
             else:
-                print("Downloading... " + IMG_BASE_URL + img_filename, img_filename)
+                print("Downloading... " + IMG_BASE_URL + img_filename)
                 # Medium returns 403 for the default user-agent
                 opener = urllib.request.build_opener()
                 opener.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4)\
                         AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36')]
                 urllib.request.install_opener(opener)
-                urllib.request.urlretrieve(IMG_BASE_URL + img_filename, img_filename)
-            paragraphs.append({'type': paragraph_type, 'img_filename': img_filename})
+                local_filename = ensure_file_extension(img_filename)
+                urllib.request.urlretrieve(IMG_BASE_URL + img_filename, local_filename)
+            paragraphs.append({'type': paragraph_type, 'img_filename': local_filename})
         else:
             text = p['text']
             markups = []
