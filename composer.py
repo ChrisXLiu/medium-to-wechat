@@ -4,12 +4,12 @@ import json
 
 def process_content(text_content, markups, soup, styler, tag_type):
     """
-    Creates an element from text_content and markups into the content_tag.
-    E.g.
-    text_content = "this is cool"
-    markups = [{"start": 8, "end": 12, "type": "STRONG"}]
-    tag_type = "p"
-    Returns "<p>this is <strong>cool</strong></p>"
+        Creates an element from text_content and markups into the content_tag.
+        E.g.
+        text_content = "this is cool"
+        markups = [{"start": 8, "end": 12, "type": "STRONG"}]
+        tag_type = "p"
+        Returns "<p>this is <strong>cool</strong></p>"
     """
     content_tag = soup.new_tag(tag_type)
     last_end = 0
@@ -27,10 +27,8 @@ def process_content(text_content, markups, soup, styler, tag_type):
             markup_tag.string = text_content[start:end]
             styler.style(markup_tag)
             content_tag.append(markup_tag)
-            text_content = text_content[end:]
             last_end = end
-    if len(text_content) > 0:
-        content_tag.append(text_content)
+    content_tag.append(text_content[last_end:])
     return content_tag
 
 
