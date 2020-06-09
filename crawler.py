@@ -80,12 +80,19 @@ def parse(data):
                 markups.append({'type': markup_type, 'start': start, 'end': end})
             paragraphs.append({'type': paragraph_type, 'text': text, 'markups': markups})
 
-    # Medium treats title as its first paragraph, of type 'H3'.
-    # It treats the optional subtitle as an optional second paragraph, of type 'H4'.
-    title = paragraphs.pop(0)['text']
+    # Medium treats the first block of type 'H3' as Title.
+    # If Title is followed by a block of type 'H4', the 'H4' is considered subtitle.
+    title = None
     subtitle = None
-    if paragraphs[0]['type'] == 'H4':
-        subtitle = paragraphs.pop(0)['text']
+    for idx in range(len(paragraphs)):
+        p = paragraphs[idx]
+        if p['type'] == 'H3':
+            title = p['text']
+            paragraphs.pop(idx)
+            if idx < len(paragraphs) and paragraphs[idx]['type'] == 'H4':
+                subtitle = paragraphs[idx]['text']
+                paragraphs.pop(idx)
+            break
 
     return {
         'title': title,
